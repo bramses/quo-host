@@ -36,7 +36,12 @@ transcription = "I've been reading sun and steel by Yukiyo Mishima and it's been
 
 def choose_quote(quotes, transcription):
     prompt = "choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing. return the following: the index of the quote, and your reasoning as to why that is the choice. return in JSON form as { index, reasoning }. say nothing else"
-    data = f"Quotes: {quotes}\nTranscription: {transcription}"
+
+    quotes_title_author_mapped = [f"{quote['text']}\n--{quote['title']} by {quote['author']}" for quote in quotes]
+
+    print(quotes_title_author_mapped)    
+
+    data = f"Quotes: {quotes_title_author_mapped}\nTranscription: {transcription}"
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -44,7 +49,7 @@ def choose_quote(quotes, transcription):
             {"role": "user", "content": data},
         ]
     )
-    return completion.choices[0].message.content.replace("```json", "").replace("```", "").strip()
+    return json.loads(completion.choices[0].message.content.replace("```json", "").replace("```", "").strip())
 
 
 def bold_quote(quote, transcription, reasoning):
@@ -60,9 +65,9 @@ def bold_quote(quote, transcription, reasoning):
     return completion.choices[0].message.content
 
 
-quote = choose_quote(quotes, transcription)
-print(quote)
-json_quote = json.loads(quote)
-bolded_quote = bold_quote(
-    quotes[json_quote['index']], transcription, json_quote['reasoning'])
-print(bolded_quote)
+# quote = choose_quote(quotes, transcription)
+# print(quote)
+# json_quote = json.loads(quote)
+# bolded_quote = bold_quote(
+#     quotes[json_quote['index']], transcription, json_quote['reasoning'])
+# print(bolded_quote)
