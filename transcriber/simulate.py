@@ -23,8 +23,8 @@ def simulate_transcription_process():
     idx = 0
     # for each section split by ------------------- run a 5 second pause
     for section in transcript.split('-------------------'):
-        if idx >= 1:
-            break
+        # if idx >= 1:
+        #     break
         print(section)
         run = create_run()
         run = add_step(run, 'transcribe', section)

@@ -1,0 +1,55 @@
+{
+    "id": "aa45e31a-60c6-40dc-a4c8-8cf49c92d675",
+    "created_at": "2024-03-14T18:56:54.822023",
+    "quotes_shown": [],
+    "what_happened": [
+        {
+            "name": "transcribe",
+            "data": "\nI don't know when it started. I've been working on my blog for years now, and in a way that feels like it's kind of like my legacy with all the effort that I put into it. But the truth is, I think I'm just afraid of working out. I'm afraid of pain. I have a very low pain tolerance.\n",
+            "timestamp": "2024-03-14T18:56:54.822056"
+        },
+        {
+            "name": "search",
+            "data": [
+                {
+                    "text": "A problem arose, though, with my decision to become a professional writer: the question of how to keep physically fit.",
+                    "title": "What I Talk About When I Talk About Running (Vintage International)",
+                    "similarity": 0.823942251454387,
+                    "id": 558488793,
+                    "author": "Haruki Murakami and Philip Gabriel",
+                    "thoughts": null
+                },
+                {
+                    "text": "But for those of you who might be on the fence when it comes to the idea of working to learn something new, I offer this word of encouragement: Life is much like going to the gym. The most painful part is deciding to go. Once you get past that, it\u2019s easy. There have been many days I have dreaded going to the gym, but once I am there and in motion, it is a pleasure. After the workout is over, I am always glad I talked myself into going.",
+                    "title": "Rich Dad Poor Dad: What The Rich Teach Their Kids About Money - That The Poor And Middle Class Do Not!",
+                    "similarity": 0.823360452443843,
+                    "id": 41702122,
+                    "author": "Robert T. Kiyosaki",
+                    "thoughts": null
+                },
+                {
+                    "text": "will not delude my readers with the idea, as many do, that anyone can be an abnormally strong man, nor with the statement that I commenced as an invalid and gradually worked up to my present strength. No! I have always been strong, and I can only guess what it feels like to be weak. My strength is still growing and I glory in it.",
+                    "title": "The Development of Physical Power",
+                    "similarity": 0.823181324476628,
+                    "id": 690177135,
+                    "author": "Arthur Saxon",
+                    "thoughts": null
+                }
+            ],
+            "timestamp": "2024-03-14T18:56:57.417671"
+        },
+        {
+            "name": "select",
+            "data": {
+                "index": 1,
+                "reasoning": "The second quote about going to the gym and the initial resistance to it seems highly relevant to the speaker's fear of working out and low pain tolerance. It can stimulate a conversation about overcoming mental barriers to physical fitness."
+            },
+            "timestamp": "2024-03-14T18:56:58.766039"
+        },
+        {
+            "name": "bold",
+            "data": "But for those of you who might be **on the fence when it comes to the idea of working to learn something new**, I offer this word of encouragement: **Life is much like going to the gym. The most painful part is deciding to go.** Once you get past that, it\u2019s easy. There have been many days I have **dreaded going to the gym, but once I am there and in motion, it is a pleasure.** After the workout is over, I am always **glad I talked myself into going**.",
+            "timestamp": "2024-03-14T18:57:03.758293"
+        }
+    ]
+}

@@ -1,0 +1,55 @@
+{
+    "id": "eefde446-c167-4dc3-9246-b12c72c90592",
+    "created_at": "2024-03-14T18:56:46.625347",
+    "quotes_shown": [],
+    "what_happened": [
+        {
+            "name": "transcribe",
+            "data": "You. Here's the thing I'm afraid to work out. I've been afraid to work out for quite a while now. I think it derives from the same root fear that I have about medicine in general and this feeling of mortality. But less about mortality, it's more about fragility.\n",
+            "timestamp": "2024-03-14T18:56:46.625357"
+        },
+        {
+            "name": "search",
+            "data": [
+                {
+                    "text": "But for those of you who might be on the fence when it comes to the idea of working to learn something new, I offer this word of encouragement: Life is much like going to the gym. The most painful part is deciding to go. Once you get past that, it\u2019s easy. There have been many days I have dreaded going to the gym, but once I am there and in motion, it is a pleasure. After the workout is over, I am always glad I talked myself into going.",
+                    "title": "Rich Dad Poor Dad: What The Rich Teach Their Kids About Money - That The Poor And Middle Class Do Not!",
+                    "similarity": 0.841745968478956,
+                    "id": 41702122,
+                    "author": "Robert T. Kiyosaki",
+                    "thoughts": null
+                },
+                {
+                    "text": "It had been more comforting to imagine that I might eventually \u201coptimize\u201d myself into the kind of person who could confront such decisions without fear, feeling totally in charge of the process. I didn\u2019t want to accept that this was never going to happen\u2014that fear was part of the deal, and that experiencing it wouldn\u2019t destroy me.",
+                    "title": "Four Thousand Weeks: Time Management for Mortals",
+                    "similarity": 0.838860444269539,
+                    "id": 312220699,
+                    "author": "Oliver Burkeman",
+                    "thoughts": null
+                },
+                {
+                    "text": "Life becomes a \u201cme against it\u201d situation. When you have fear, insecurity, or weakness inside of you, and you attempt to keep it from being stimulated, there will inevitably be events and changes in life that challenge your efforts. Because you resist these changes, you feel that you are struggling with life.",
+                    "title": "The Untethered Soul: The Journey Beyond Yourself",
+                    "similarity": 0.838134883660551,
+                    "id": 41702514,
+                    "author": "Michael A. Singer",
+                    "thoughts": null
+                }
+            ],
+            "timestamp": "2024-03-14T18:56:49.650797"
+        },
+        {
+            "name": "select",
+            "data": {
+                "index": 1,
+                "reasoning": "The quote about fear and acceptance from 'Four Thousand Weeks: Time Management for Mortals' is the most relevant as it directly addresses the fear of facing challenges and the desire to optimize oneself, which aligns with the speaker's fear of working out and confronting mortality."
+            },
+            "timestamp": "2024-03-14T18:56:51.367352"
+        },
+        {
+            "name": "bold",
+            "data": "\"It had been more comforting to imagine that I might eventually \u201coptimize\u201d myself into the kind of person who could confront such decisions without fear, feeling totally in charge of the process. **I didn\u2019t want to accept that this was never going to happen\u2014that fear was part of the deal, and that experiencing it wouldn\u2019t destroy me.**\"",
+            "timestamp": "2024-03-14T18:56:54.821088"
+        }
+    ]
+}
