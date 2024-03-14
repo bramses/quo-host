@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "quo-host"
+version = "0.1.0"
+description = ""
+authors = ["Bram Adams <3282661+bramses@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "quo_host"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^1.0.1"
+assemblyai = "^0.23.0"
+openai = "^1.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

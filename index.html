@@ -35,50 +35,66 @@
     </div>
 
     <script>
-    //   fetch("/new-quote-data")
-    //     .then((response) => response.json())
-    //     .then((newQuoteData) => {
-    //       console.log(newQuoteData);
-    //       quoteData = newQuoteData;
-    //       animateQuote();
-    //     })
-    //     .catch((error) => console.error("Error:", error));
+      //   fetch("/new-quote-data")
+      //     .then((response) => response.json())
+      //     .then((newQuoteData) => {
+      //       console.log(newQuoteData);
+      //       quoteData = newQuoteData;
+      //       animateQuote();
+      //     })
+      //     .catch((error) => console.error("Error:", error));
 
-        // run fetch post request every 5 seconds
-        let recentQuoteData = null;
+      // run fetch post request every 5 seconds
+      let recentQuoteData = null;
 
-        setInterval(() => {
-            fetch("/quote-data", { method: "GET" })
-            .then((response) => response.json())
-            .then((newQuoteData) => {
-                quoteData = newQuoteData;
-                if (quoteData === null) {
-                    console.log("No new quote data");
-                    return;
-                }
-                console.log(quoteData);
-                if (recentQuoteData && quoteData.text === recentQuoteData.text) {
-                    console.log("Quote data is the same as the previous one");
-                    return;
-                }
+      setInterval(() => {
+        fetch("/quote-data", { method: "GET" })
+          .then((response) => response.json())
+          .then((newQuoteData) => {
+            quoteData = newQuoteData;
+            if (quoteData === null) {
+              console.log("No new quote data");
+              return;
+            }
+            console.log(quoteData);
+            if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+              console.log("Quote data is the same as the previous one");
+              return;
+            }
 
-                recentQuoteData = quoteData;
+            recentQuoteData = quoteData;
+            animationDelay = getDelayBasedOnStringLength(quoteData.text);
 
-                animateQuote();
-            })
-            .catch((error) => console.error("Error:", error));
-        }, 5000);
+            animateQuote();
+          })
+          .catch((error) => console.error("Error:", error));
+      }, 5000);
     </script>
 
     <script>
-    //   const quoteData = {
-    //     text: `**"The revolutions in biotech and infotech will give us control of the world inside us and will enable us to engineer and manufacture life.** We will learn how to design brains, extend lives, and kill thoughts at our discretion. Nobody knows what the consequences will be. **Humans were always far better at inventing tools than using them wisely.** It is easier to manipulate a river by building a dam than it is to predict all the complex consequences this will have for the wider ecological system. Similarly, it will be easier to redirect the flow of our minds than to divine what that will do to our personal psychology or to our social systems."`,
-    //     title: "Civilized to Death: The Price of Progress",
-    //     author: "Christopher Ryan",
-    //   };
-    let quoteData = null;
+      //   const quoteData = {
+      //     text: `**"The revolutions in biotech and infotech will give us control of the world inside us and will enable us to engineer and manufacture life.** We will learn how to design brains, extend lives, and kill thoughts at our discretion. Nobody knows what the consequences will be. **Humans were always far better at inventing tools than using them wisely.** It is easier to manipulate a river by building a dam than it is to predict all the complex consequences this will have for the wider ecological system. Similarly, it will be easier to redirect the flow of our minds than to divine what that will do to our personal psychology or to our social systems."`,
+      //     title: "Civilized to Death: The Price of Progress",
+      //     author: "Christopher Ryan",
+      //   };
+      let quoteData = null;
 
-      const animationDelay = 12;
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function getDelayBasedOnStringLength(str) {
+        const minLength = 100;
+        const maxLength = 2000;
+        const minDelay = 20;
+        const maxDelay = 2;
+
+        const length = Math.min(Math.max(str.length, minLength), maxLength);
+        const t = (length - minLength) / (maxLength - minLength);
+        return lerp(minDelay, maxDelay, t);
+      }
+
+      let animationDelay = 20
 
       function animateText(element, text, delay, callback) {
         let i = 0;
@@ -112,17 +128,21 @@
       }
 
       function animateHighlights(element, highlights, delay) {
+        let totalDelay = 0;
         highlights.forEach((highlight, idx) => {
-          let i = highlight.startIdx - 4 * idx;
-          const interval = setInterval(() => {
-            if (i < highlight.startIdx + (highlight.offset - 4 * idx)) {
-              if (!element.childNodes[i]) clearInterval(interval);
-              element.childNodes[i].classList.add("highlight");
-              i++;
-            } else {
-              clearInterval(interval);
-            }
-          }, delay);
+          setTimeout(() => {
+            let i = highlight.startIdx - 4 * idx;
+            const interval = setInterval(() => {
+              if (i < highlight.startIdx + (highlight.offset - 4 * idx)) {
+                if (!element.childNodes[i]) clearInterval(interval);
+                element.childNodes[i].classList.add("highlight");
+                i++;
+              } else {
+                clearInterval(interval);
+              }
+            }, delay);
+          }, totalDelay);
+          totalDelay += (highlight.offset - 4 * idx) * delay + delay;
         });
       }
 
@@ -138,7 +158,7 @@
         const highlights = findHighlights(quoteData.text);
 
         animateText(quoteText, plaintext, animationDelay, () => {
-          animateHighlights(quoteText, highlights, animationDelay);
+          animateHighlights(quoteText, highlights, 12);
         });
 
         quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
