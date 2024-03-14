@@ -13,6 +13,7 @@ Quotes: {quotes}
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -46,17 +47,47 @@ quotes = [
 	}
 ]
 
-transcription = "So this is a call to myself to start working out, to start building a body that I can be proud of to die in. I do aspire for the beauty of form internally and externally. I look for beautiful things in the world. I eat beautiful things, I look at beautiful things and I listen to beautiful things. It's time to make my body one of those beautiful things."
+transcription = "I don't know when it started. I've been working on my blog for years now, and in a way that feels like it's kind of like my legacy with all the effort that I put into it. But the truth is, I think I'm just afraid of working out. I'm afraid of pain. I have a very low pain tolerance."
 
 
-data = f"Conversation Transcription: {transcription}\nQuotes: {quotes}"
+# data = f"Conversation Transcription: {transcription}\nQuotes: {quotes}"
 
-completion = client.chat.completions.create(
-  model="gpt-4-turbo-preview",
-  messages=[
-    {"role": "system", "content": sys_prompt},
-    {"role": "user", "content": data},
-  ]
-)
+# completion = client.chat.completions.create(
+#   model="gpt-4-turbo-preview",
+#   messages=[
+#     {"role": "system", "content": sys_prompt},
+#     {"role": "user", "content": data},
+#   ]
+# )
 
-print(completion.choices[0].message.content)
+# print(completion.choices[0].message.content)
+
+
+def choose_quote(quotes, transcription):
+    prompt = "choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing. return the following: the index of the quote, and your reasoning as to why that is the choice. return in JSON form as { index, reasoning }. say nothing else"
+    data = f"Quotes: {quotes}\nTranscription: {transcription}"
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": data},
+        ]
+    )
+    return completion.choices[0].message.content.replace("```json", "").replace("```", "").strip()
+
+def bold_quote(quote, transcription, reasoning):
+    prompt = "bold the text in the quote that makes a complete thought in reference to the transcription and the reasoning. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.\n\nreturn the edited full quote. say nothing else."
+    data = f"Quote: {quote}\n\nTranscription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}"
+    completion = client.chat.completions.create(
+        model="gpt-4-turbo-preview",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": data},
+        ]
+    )
+    return completion.choices[0].message.content
+
+quote = choose_quote(quotes, transcription)
+json_quote = json.loads(quote)
+bolded_quote = bold_quote(quotes[json_quote['index']], transcription, json_quote['reasoning'])
+print(bolded_quote)
