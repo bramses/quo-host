@@ -11,6 +11,7 @@ python = "^3.9"
 python-dotenv = "^1.0.1"
 assemblyai = "^0.23.0"
 openai = "^1.14.0"
+requests = "^2.31.0"
 
 
 [build-system]
