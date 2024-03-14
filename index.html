@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Animation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f5f5f5;
+      }
+      #quote-container {
+        max-width: 80%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .highlight {
+        font-weight: bold;
+        background-color: #ffff99;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="quote-container">
+      <p id="quote-text"></p>
+      <p id="quote-author"></p>
+    </div>
+
+    <script>
+    //   fetch("/new-quote-data")
+    //     .then((response) => response.json())
+    //     .then((newQuoteData) => {
+    //       console.log(newQuoteData);
+    //       quoteData = newQuoteData;
+    //       animateQuote();
+    //     })
+    //     .catch((error) => console.error("Error:", error));
+
+        // run fetch post request every 5 seconds
+        let recentQuoteData = null;
+
+        setInterval(() => {
+            fetch("/quote-data", { method: "GET" })
+            .then((response) => response.json())
+            .then((newQuoteData) => {
+                quoteData = newQuoteData;
+                if (quoteData === null) {
+                    console.log("No new quote data");
+                    return;
+                }
+                console.log(quoteData);
+                if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+                    console.log("Quote data is the same as the previous one");
+                    return;
+                }
+
+                recentQuoteData = quoteData;
+
+                animateQuote();
+            })
+            .catch((error) => console.error("Error:", error));
+        }, 5000);
+    </script>
+
+    <script>
+    //   const quoteData = {
+    //     text: `**"The revolutions in biotech and infotech will give us control of the world inside us and will enable us to engineer and manufacture life.** We will learn how to design brains, extend lives, and kill thoughts at our discretion. Nobody knows what the consequences will be. **Humans were always far better at inventing tools than using them wisely.** It is easier to manipulate a river by building a dam than it is to predict all the complex consequences this will have for the wider ecological system. Similarly, it will be easier to redirect the flow of our minds than to divine what that will do to our personal psychology or to our social systems."`,
+    //     title: "Civilized to Death: The Price of Progress",
+    //     author: "Christopher Ryan",
+    //   };
+    let quoteData = null;
+
+      const animationDelay = 12;
+
+      function animateText(element, text, delay, callback) {
+        let i = 0;
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            const span = document.createElement("span");
+            span.textContent = text[i];
+            element.appendChild(span);
+            i++;
+          } else {
+            clearInterval(interval);
+            if (callback) callback();
+          }
+        }, delay);
+      }
+
+      function findHighlights(text) {
+        const regex = /\*\*(.*?)\*\*/g;
+        const highlights = [];
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+          highlights.push({
+            startIdx: match.index,
+            offset: match[1].length,
+            substr: match[1],
+          });
+        }
+
+        return highlights;
+      }
+
+      function animateHighlights(element, highlights, delay) {
+        highlights.forEach((highlight, idx) => {
+          let i = highlight.startIdx - 4 * idx;
+          const interval = setInterval(() => {
+            if (i < highlight.startIdx + (highlight.offset - 4 * idx)) {
+              if (!element.childNodes[i]) clearInterval(interval);
+              element.childNodes[i].classList.add("highlight");
+              i++;
+            } else {
+              clearInterval(interval);
+            }
+          }, delay);
+        });
+      }
+
+      function animateQuote() {
+        // clear previous quote
+        const quoteContainer = document.getElementById("quote-container");
+        const quoteText = document.getElementById("quote-text");
+        quoteText.textContent = "";
+
+        const quoteAuthor = document.getElementById("quote-author");
+
+        const plaintext = quoteData.text.replace(/\*\*/g, "");
+        const highlights = findHighlights(quoteData.text);
+
+        animateText(quoteText, plaintext, animationDelay, () => {
+          animateHighlights(quoteText, highlights, animationDelay);
+        });
+
+        quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
+      }
+
+      animateQuote();
+    </script>
+  </body>
+</html>
