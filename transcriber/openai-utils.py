@@ -1,15 +1,3 @@
-'''
-1. choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing.
-2. bold the text in the quote that makes a complete thought in reference to the transcription. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.
-3. feed back edited full quote, say nothing else
-
----
-
-Conversation Transcription: {transcription}
-
-Quotes: {quotes}
-'''
-
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
@@ -18,10 +6,6 @@ import json
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-sys_prompt = '''1. choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing.
-2. bold the text in the quote that makes a complete thought in reference to the transcription. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.
-3. feed back edited full quote, say nothing else'''
 
 quotes = [
 	{
@@ -48,20 +32,6 @@ quotes = [
 ]
 
 transcription = "I don't know when it started. I've been working on my blog for years now, and in a way that feels like it's kind of like my legacy with all the effort that I put into it. But the truth is, I think I'm just afraid of working out. I'm afraid of pain. I have a very low pain tolerance."
-
-
-# data = f"Conversation Transcription: {transcription}\nQuotes: {quotes}"
-
-# completion = client.chat.completions.create(
-#   model="gpt-4-turbo-preview",
-#   messages=[
-#     {"role": "system", "content": sys_prompt},
-#     {"role": "user", "content": data},
-#   ]
-# )
-
-# print(completion.choices[0].message.content)
-
 
 def choose_quote(quotes, transcription):
     prompt = "choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing. return the following: the index of the quote, and your reasoning as to why that is the choice. return in JSON form as { index, reasoning }. say nothing else"
