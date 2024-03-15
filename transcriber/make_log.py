@@ -13,13 +13,32 @@ def create_run():
     }
     return empty_run
 
-def add_step(run, step_name, data):
+def add_step(run, step_name, process_id, data):
+
     step = {
         "name": step_name,
         "data": data,
         "timestamp": datetime.datetime.now().isoformat()
     }
-    run["what_happened"].append(step)
+
+    if process_id:
+        for process in run["what_happened"]:
+            if process["id"] == process_id:
+                process["steps"].append(step)
+                return run
+        return run
+    else:
+        run["what_happened"][-1]["steps"].append(step)
+
+    return run
+
+def add_process(run):
+    process = {
+        "id": str(uuid.uuid4()),
+        "steps": [],
+        "timestamp": datetime.datetime.now().isoformat()
+    }
+    run["what_happened"].append(process)
     return run
 
 def package_run(run):

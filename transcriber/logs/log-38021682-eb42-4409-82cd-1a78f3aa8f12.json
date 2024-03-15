@@ -1,0 +1,116 @@
+{
+    "id": "38021682-eb42-4409-82cd-1a78f3aa8f12",
+    "created_at": "2024-03-14T20:00:08.468625",
+    "quotes_shown": [],
+    "what_happened": [
+        {
+            "id": "fbf8470b-eddc-493d-9ac1-f5f6e0b30b37",
+            "steps": [
+                {
+                    "name": "transcribe",
+                    "data": "You. Here's the thing I'm afraid to work out. I've been afraid to work out for quite a while now. I think it derives from the same root fear that I have about medicine in general and this feeling of mortality. But less about mortality, it's more about fragility.\n",
+                    "timestamp": "2024-03-14T20:00:08.468646"
+                },
+                {
+                    "name": "search",
+                    "data": [
+                        {
+                            "text": "But for those of you who might be on the fence when it comes to the idea of working to learn something new, I offer this word of encouragement: Life is much like going to the gym. The most painful part is deciding to go. Once you get past that, it\u2019s easy. There have been many days I have dreaded going to the gym, but once I am there and in motion, it is a pleasure. After the workout is over, I am always glad I talked myself into going.",
+                            "title": "Rich Dad Poor Dad: What The Rich Teach Their Kids About Money - That The Poor And Middle Class Do Not!",
+                            "similarity": 0.841745968478956,
+                            "id": 41702122,
+                            "author": "Robert T. Kiyosaki",
+                            "thoughts": null
+                        },
+                        {
+                            "text": "It had been more comforting to imagine that I might eventually \u201coptimize\u201d myself into the kind of person who could confront such decisions without fear, feeling totally in charge of the process. I didn\u2019t want to accept that this was never going to happen\u2014that fear was part of the deal, and that experiencing it wouldn\u2019t destroy me.",
+                            "title": "Four Thousand Weeks: Time Management for Mortals",
+                            "similarity": 0.838860444269539,
+                            "id": 312220699,
+                            "author": "Oliver Burkeman",
+                            "thoughts": null
+                        },
+                        {
+                            "text": "Life becomes a \u201cme against it\u201d situation. When you have fear, insecurity, or weakness inside of you, and you attempt to keep it from being stimulated, there will inevitably be events and changes in life that challenge your efforts. Because you resist these changes, you feel that you are struggling with life.",
+                            "title": "The Untethered Soul: The Journey Beyond Yourself",
+                            "similarity": 0.838134883660551,
+                            "id": 41702514,
+                            "author": "Michael A. Singer",
+                            "thoughts": null
+                        }
+                    ],
+                    "timestamp": "2024-03-14T20:00:11.508040"
+                },
+                {
+                    "name": "select",
+                    "data": {
+                        "index": 1,
+                        "reasoning": "The quote about confronting fear and accepting it as part of the process directly relates to the fear mentioned in the transcription about working out and mortality. It highlights the idea that fear is normal and doesn't have to prevent us from taking action, which could spark a deeper conversation about dealing with fears and fragilities."
+                    },
+                    "timestamp": "2024-03-14T20:00:13.588505"
+                },
+                {
+                    "name": "bold",
+                    "data": "\"It had been more **comforting to imagine that I might eventually \u201coptimize\u201d myself into the kind of person who could confront such decisions without fear**, feeling totally in charge of the process. **I didn\u2019t want to accept that this was never going to happen\u2014that fear was part of the deal, and that experiencing it wouldn\u2019t destroy me.**\"",
+                    "timestamp": "2024-03-14T20:00:17.139656"
+                }
+            ],
+            "timestamp": "2024-03-14T20:00:08.468644"
+        },
+        {
+            "id": "b17d55ea-8ffb-4d05-a14e-24912fdba1d1",
+            "steps": [
+                {
+                    "name": "transcribe",
+                    "data": "\nI don't know when it started. I've been working on my blog for years now, and in a way that feels like it's kind of like my legacy with all the effort that I put into it. But the truth is, I think I'm just afraid of working out. I'm afraid of pain. I have a very low pain tolerance.\n",
+                    "timestamp": "2024-03-14T20:00:17.139770"
+                },
+                {
+                    "name": "search",
+                    "data": [
+                        {
+                            "text": "A problem arose, though, with my decision to become a professional writer: the question of how to keep physically fit.",
+                            "title": "What I Talk About When I Talk About Running (Vintage International)",
+                            "similarity": 0.823942251454387,
+                            "id": 558488793,
+                            "author": "Haruki Murakami and Philip Gabriel",
+                            "thoughts": null
+                        },
+                        {
+                            "text": "But for those of you who might be on the fence when it comes to the idea of working to learn something new, I offer this word of encouragement: Life is much like going to the gym. The most painful part is deciding to go. Once you get past that, it\u2019s easy. There have been many days I have dreaded going to the gym, but once I am there and in motion, it is a pleasure. After the workout is over, I am always glad I talked myself into going.",
+                            "title": "Rich Dad Poor Dad: What The Rich Teach Their Kids About Money - That The Poor And Middle Class Do Not!",
+                            "similarity": 0.823360452443843,
+                            "id": 41702122,
+                            "author": "Robert T. Kiyosaki",
+                            "thoughts": null
+                        },
+                        {
+                            "text": "will not delude my readers with the idea, as many do, that anyone can be an abnormally strong man, nor with the statement that I commenced as an invalid and gradually worked up to my present strength. No! I have always been strong, and I can only guess what it feels like to be weak. My strength is still growing and I glory in it.",
+                            "title": "The Development of Physical Power",
+                            "similarity": 0.823181324476628,
+                            "id": 690177135,
+                            "author": "Arthur Saxon",
+                            "thoughts": null
+                        }
+                    ],
+                    "timestamp": "2024-03-14T20:00:19.564127"
+                },
+                {
+                    "name": "select",
+                    "data": {
+                        "index": 1,
+                        "reasoning": "The quote about the struggle to start working out and the pain tolerance mentioned in the transcription resonates with the fear of physical discomfort and the difficulty of deciding to go to the gym mentioned in this quote. It can spark a conversation about overcoming mental barriers to exercise and the mental aspect of physical fitness."
+                    },
+                    "timestamp": "2024-03-14T20:00:21.163554"
+                },
+                {
+                    "name": "bold",
+                    "data": "**But for those of you who might be on the fence when it comes to the idea of working to learn something new, I offer this word of encouragement:** Life is much like going to the gym. **The most painful part is deciding to go. Once you get past that, it\u2019s easy.** There have been many days I have dreaded going to the gym, but once I am there and in motion, it is a pleasure. After the workout is over, **I am always glad I talked myself into going.**",
+                    "timestamp": "2024-03-14T20:00:27.718419"
+                }
+            ],
+            "timestamp": "2024-03-14T20:00:17.139764"
+        }
+    ],
+    "ended_at": "2024-03-14T20:00:27.718443"
+}
