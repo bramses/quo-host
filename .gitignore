@@ -1,6 +1,6 @@
 node_modules
 .env
 *.m4a
-test.txt
+test*.txt
 _logs
 logs

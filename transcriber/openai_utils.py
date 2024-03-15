@@ -51,8 +51,8 @@ def choose_quote(quotes, transcription):
 
 
 def bold_quote(quote, transcription, reasoning):
-    prompt = "bold the text in the quote that makes a complete thought in reference to the transcription and the reasoning. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.\n\nreturn the edited full quote.\n\nSAY NOTHING ELSE OTHER THAN THE EDITED QUOTE."
-    data = f"Quote: {quote}\n\nTranscription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}"
+    prompt = "bold the text in the quote that makes a complete thought in reference to the transcription and the reasoning. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.\n\nreturn the edited full quote.\n\nSAY NOTHING ELSE OTHER THAN THE EDITED QUOTE as JSON in form { edited_quote }."
+    data = f"Transcription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}\n\nQuote: {quote}\n\nEdited Quote Only:\n"
     completion = client.chat.completions.create(
         model="gpt-4-turbo-preview",
         messages=[
@@ -60,7 +60,8 @@ def bold_quote(quote, transcription, reasoning):
             {"role": "user", "content": data},
         ]
     )
-    return completion.choices[0].message.content
+    print(completion.choices[0].message.content)
+    return json.loads(completion.choices[0].message.content.replace("```json", "").replace("```", "").strip())["edited_quote"]
 
 
 # quote = choose_quote(quotes, transcription)
