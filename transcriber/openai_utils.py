@@ -6,6 +6,8 @@ import json
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+GPT3_MODEL = "gpt-3.5-turbo"
+GPT4_MODEL = "gpt-4-turbo-preview"
 
 quotes = [
     {
@@ -41,7 +43,7 @@ def choose_quote(quotes, transcription):
 
     data = f"Quotes: {quotes_title_author_mapped}\nTranscription: {transcription}"
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=GPT3_MODEL,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": data},
@@ -51,17 +53,38 @@ def choose_quote(quotes, transcription):
 
 
 def bold_quote(quote, transcription, reasoning):
-    prompt = "bold the text in the quote that makes a complete thought in reference to the transcription and the reasoning. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.\n\nreturn the edited full quote.\n\nSAY NOTHING ELSE OTHER THAN THE EDITED QUOTE as JSON in form { edited_quote }."
-    data = f"Transcription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}\n\nQuote: {quote}\n\nEdited Quote Only:\n"
+    prompt = '''bold the text in the quote that makes a complete thought in reference to the transcription and the reasoning. do not bold the entire quote, it will only be glanced at. you can bold multiple parts of the quote if relevant.
+    
+    return the edited full quote. YOU MUST REPEAT THE QUOTE VERBATIM.
+    
+    SAY NOTHING ELSE OTHER THAN THE EDITED QUOTE VERBATIM (AN EXACT COPY WITH BOLD HIGHLIGHTS as JSON in form { edited_quote }.
+    
+    Example:
+
+    Transcription: Software developers never attain the same level of acclaim as authors, but in my opinion that is due to the way software is set up and the types of rewards one can or should expect.
+
+    Reasoning for Quote Choice in Transcript: This quote is interesting because much like academics, software developers are often working on projects that are not immediately recognized by the public.
+
+    Quote: <start>Most academics, and most authors I assume, have a more-or-less secret dream of writing a bestseller. We tell ourselves that we would like the money—and we would—but what we really crave is the recognition. We want our work, in all its craggy peculiarity, to elicit the respect, the passionate admiration, the love, of millions of people. And this secret dream feels to us so disreputable, so infantile, so desperate, that we protect ourselves against it by assuring ourselves that of course our work is too good to be popular. Then most of us—at least those of us raised in the great tradition of American populism—become ashamed of this defense, and in turn defend against it by an ironic confession of the very grandiosity against which the whole structure is a defense. Hence clever remarks like mine about “sufficient condition.”<end>
+
+
+    returns the following. note that the quote is the same as the one given in the prompt it is VERBATIM. the only thing that changes is the bolded text.
+
+    Edited Quote Only:
+    {
+        "edited_quote": "<start>**Most academics, and most authors I assume, have a more-or-less secret dream of writing a bestseller.** **We tell ourselves that we would like the money—and we would—but what we really crave is the recognition.** **We want our work, in all its craggy peculiarity, to elicit the respect,** the passionate admiration, the love, **of millions of people.** And **this secret dream feels to us so disreputable, so infantile, so desperate, that we protect ourselves against it by assuring ourselves that of course our work is too good to be popular.** Then **most of us—at least those of us raised in the great tradition of American populism—become ashamed of this defense, and in turn defend against it by an ironic confession of the very grandiosity against which the whole structure is a defense.** Hence clever remarks like mine about “sufficient condition.”<end>"
+    }
+    '''
+    data = f"Transcription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}\n\nQuote:\n<start>{quote}<end>\n\nEdited Quote Only:\n"
     completion = client.chat.completions.create(
-        model="gpt-4-turbo-preview",
+        model=GPT3_MODEL,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": data},
         ]
     )
     print(completion.choices[0].message.content)
-    return json.loads(completion.choices[0].message.content.replace("```json", "").replace("```", "").strip())["edited_quote"]
+    return json.loads(completion.choices[0].message.content.replace("```json", "").replace("```", "").strip())["edited_quote"].replace("<start>", "").replace("<end>", "")
 
 
 # quote = choose_quote(quotes, transcription)

@@ -12,6 +12,7 @@ load_dotenv()
 
 test_transcript_path = './transcriber/test.txt'
 SEARCH_PATH = os.getenv('SEARCH_PATH')
+RANDOM_PATH = os.getenv('RANDOM_PATH')
 
 def simulate_transcription_process():
     print('Simulating a "real" transcription process...')
@@ -23,36 +24,59 @@ def simulate_transcription_process():
     idx = 0
     # for each section split by ------------------- run a 5 second pause
     run = create_run()
-    for section in transcript.split('-------------------'):
-        if idx >= 2:
-            break
-        print(section)
-        run = add_process(run)
-        process_id = run['what_happened'][-1]['id']
+    try:
+        for section in transcript.split('-------------------'):
+            if idx >= 4:
+                break
+            print(section)
+            run = add_process(run)
+            process_id = run['what_happened'][-1]['id']
 
-        
-        run = add_step(run, 'transcribe', process_id, section)
-        # post to the search endpoint with { query: section }
-        response = requests.post(SEARCH_PATH, json={'query': section})
-        response_json = response.json()
-        run = add_step(run, 'search', process_id, response_json)
-        # get the quotes from the response
-        # filter out quotes that have already been shown
-        filtered_quotes = [quote for quote in response_json if quote['id'] not in run['quotes_shown']]
-        chosen_quote = choose_quote(filtered_quotes, section)
-        run = add_step(run, 'select', process_id, chosen_quote)
-        # add quote id to quotes_shown
-        run = add_quote_shown(run, response_json[chosen_quote['index']]['id'])
-        # bold the quote
-        bolded_quote = bold_quote(response_json[chosen_quote['index']]['text'], section, chosen_quote['reasoning'])
-        run = add_step(run, 'bold', process_id, bolded_quote)
-        # post to http://localhost:3000/new-quote-data with { text: bolded_quote, author: response_json[chosen_quote['index']]['author'], title: response_json[chosen_quote['index']]['title'] }
-        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': response_json[chosen_quote['index']]['author'], 'title': response_json[chosen_quote['index']]['title']})
-        # print(response.json())
-        time.sleep(5)
-        idx += 1
-    run = package_run(run)
-    write_to_log(run, run_id=run['id'])
+            
+            run = add_step(run, 'transcribe', process_id, section)
+            # post to the search endpoint with { query: section }
+            response = requests.post(SEARCH_PATH, json={'query': section})
+            response_json = response.json()
+            run = add_step(run, 'search', process_id, response_json)
+            # get the quotes from the response
+            # filter out quotes that have already been shown
+            filtered_quotes = [quote for quote in response_json if quote['id'] not in run['quotes_shown']]
+
+            run = add_step(run, 'filter', process_id, filtered_quotes)
+            
+            # if filtered_quotes is empty, post to RANDOM_PATH to get random quotes
+            if len(filtered_quotes) == 0:
+                print('No quotes found, getting random quotes...')
+                response = requests.post(RANDOM_PATH)
+                response_json = response.json()
+                for quote in response_json:
+                    quote['title'] = quote['book']['title']
+                    quote['author'] = quote['book']['author']
+                    del quote['embedding']
+                print('Random quotes:', response_json)
+                run = add_step(run, 'random', process_id, response_json)
+                filtered_quotes = response_json
+
+            chosen_quote = choose_quote(filtered_quotes, section)
+            run = add_step(run, 'select', process_id, chosen_quote)
+            # add quote id to quotes_shown
+            run = add_quote_shown(run, filtered_quotes[chosen_quote['index']]['id'])
+            # bold the quote
+            bolded_quote = bold_quote(filtered_quotes[chosen_quote['index']]['text'], section, chosen_quote['reasoning'])
+            run = add_step(run, 'bold', process_id, bolded_quote)
+            # post to http://localhost:3000/new-quote-data with { text: bolded_quote, author: response_json[chosen_quote['index']]['author'], title: response_json[chosen_quote['index']]['title'] }
+            response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title']})
+            # print(response.json())
+            time.sleep(5)
+            idx += 1
+        run = package_run(run)
+        write_to_log(run, run_id=run['id'])
+    except Exception as e:
+        print(e)
+        run = package_run(run)
+        write_to_log(run, run_id=run['id'])
+        print('Error occurred, writing to log...')
+        print('Exiting...')
 
         
 
