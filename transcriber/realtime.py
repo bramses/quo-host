@@ -9,20 +9,23 @@
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
-import time
+from transcriber import process
+from make_log import create_run, write_to_log
 
 load_dotenv()
 
 aai.settings.api_key = os.getenv("ASSEMBLYAI_API_KEY")
 
-DRINKING_BIRD_LENGTH = 200
+DRINKING_BIRD_LENGTH = 300
 drinking_bird = ""
-
+run = None
 
 def on_open(session_opened: aai.RealtimeSessionOpened):
     "This function is called when the connection has been established."
 
     print("Session ID:", session_opened.session_id)
+    global run
+    run = create_run()
 
 
 def on_data(transcript: aai.RealtimeTranscript):
@@ -34,6 +37,7 @@ def on_data(transcript: aai.RealtimeTranscript):
     if isinstance(transcript, aai.RealtimeFinalTranscript):
         print(transcript.text, end="\r\n")
         global drinking_bird
+        global run
         drinking_bird += transcript.text
     else:
         print(transcript.text, end="\r")
@@ -43,6 +47,8 @@ def on_data(transcript: aai.RealtimeTranscript):
         drinking_bird = drinking_bird[-DRINKING_BIRD_LENGTH:]
         print("filled up drinking bird")
         print(drinking_bird)
+        run = process(drinking_bird, run)
+        # write_to_log(run, run_id=run['id'])
         # clear drinking bird
         drinking_bird = ""
 
@@ -51,12 +57,18 @@ def on_error(error: aai.RealtimeError):
     "This function is called when the connection has been closed."
 
     print("An error occured:", error)
+    global run
+    # print(run)
+    # write_to_log(run, run_id=run['id'])
 
 
 def on_close():
     "This function is called when the connection has been closed."
 
     print("Closing Session")
+    global run
+    # print(run)
+    # write_to_log(run, run_id=run['id'])
 
 
 transcriber = aai.RealtimeTranscriber(
