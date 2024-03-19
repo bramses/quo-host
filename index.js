@@ -21,6 +21,9 @@ app.post('/new-quote-data', (req, res) => {
 });
 
 app.get('/quote-data', (req, res) => {
+    if (!quoteData) {
+        res.json({error: 'No quote data found'});
+    }
     console.log('GET request received');
     res.json(quoteData);
 })

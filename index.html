@@ -22,28 +22,44 @@
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
+      #reasoning-container {
+        max-width: 80%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      #parent-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
       .highlight {
         font-weight: bold;
         background-color: #ffff99;
       }
+      #reasoning-container,
+      #quote-container {
+        margin-bottom: 20px; /* Adjust this value to your liking */
+      }
     </style>
   </head>
   <body>
-    <div id="quote-container">
-      <p id="quote-text"></p>
-      <p id="quote-author"></p>
+    <div id="parent-container">
+      <div id="reasoning-container">
+        <h2>Reasoning</h2>
+        <p id="reasoning">
+        </p>
+      </div>
+      <div id="quote-container">
+        <h2>Quote</h2>
+        <p id="quote-text"></p>
+        <p id="quote-author"></p>
+      </div>
     </div>
-
     <script>
-      //   fetch("/new-quote-data")
-      //     .then((response) => response.json())
-      //     .then((newQuoteData) => {
-      //       console.log(newQuoteData);
-      //       quoteData = newQuoteData;
-      //       animateQuote();
-      //     })
-      //     .catch((error) => console.error("Error:", error));
-
+      let quoteData = null;
       // run fetch post request every 5 seconds
       let recentQuoteData = null;
 
@@ -72,13 +88,6 @@
     </script>
 
     <script>
-      //   const quoteData = {
-      //     text: `**"The revolutions in biotech and infotech will give us control of the world inside us and will enable us to engineer and manufacture life.** We will learn how to design brains, extend lives, and kill thoughts at our discretion. Nobody knows what the consequences will be. **Humans were always far better at inventing tools than using them wisely.** It is easier to manipulate a river by building a dam than it is to predict all the complex consequences this will have for the wider ecological system. Similarly, it will be easier to redirect the flow of our minds than to divine what that will do to our personal psychology or to our social systems."`,
-      //     title: "Civilized to Death: The Price of Progress",
-      //     author: "Christopher Ryan",
-      //   };
-      let quoteData = null;
-
       function lerp(start, end, t) {
         return start + (end - start) * t;
       }
@@ -94,7 +103,7 @@
         return lerp(minDelay, maxDelay, t);
       }
 
-      let animationDelay = 20
+      let animationDelay = 20;
 
       function animateText(element, text, delay, callback) {
         let i = 0;
@@ -150,6 +159,7 @@
         // clear previous quote
         const quoteContainer = document.getElementById("quote-container");
         const quoteText = document.getElementById("quote-text");
+        const reasoning = document.getElementById("reasoning");
         quoteText.textContent = "";
 
         const quoteAuthor = document.getElementById("quote-author");
@@ -162,6 +172,7 @@
         });
 
         quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
+        reasoning.textContent = quoteData.reasoning;
       }
 
       animateQuote();

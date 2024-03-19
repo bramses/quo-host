@@ -12,7 +12,7 @@ CONTEXT_WINDOW = 4000
 
 
 def choose_quote(quotes, transcription):
-    prompt = "choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing. return the following: the index of the quote (index from zero), and your reasoning as to why that is the choice. return in JSON form as { index, reasoning }. say nothing else"
+    prompt = "choose the most interesting and relevant quote of the quotes given the transcription. the quote chosen should be the one that stimulates the most conversation. look at each in the context of the transcription before choosing. return the following: the index of the quote (index from zero), and your reasoning as to why that is the choice. the reasoning should POINT OUT THE RELEVANT PHRASES VERBATIM IN THE TRANSCRIPT BEING REFERRED TO. REASONING SHOULD BE TWO SENTENCES MAX. return in JSON form as { index, reasoning }. say nothing else"
 
     quotes_title_author_mapped = [
         f"{quote['text']}\n--{quote['title']} by {quote['author']}" for quote in quotes]
