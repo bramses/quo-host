@@ -19,7 +19,7 @@ def choose_quote(quotes, transcription):
 
     data = f"Quotes: {quotes_title_author_mapped}\nTranscription: {transcription}"
     completion = client.chat.completions.create(
-        model=GPT3_MODEL,
+        model=GPT4_MODEL,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": data},
@@ -53,7 +53,7 @@ def bold_quote(quote, transcription, reasoning):
     '''
     data = f"Transcription: {transcription}\n\nReasoning for Quote Choice in Transcript: {reasoning}\n\nQuote:\n<start>{quote}<end>\n\nEdited Quote Only:\n"
     completion = client.chat.completions.create(
-        model=GPT3_MODEL,
+        model=GPT4_MODEL,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": data},
@@ -70,7 +70,7 @@ def predict_paragraph(transcription):
     prompt = '''predict the next paragraph of the transcription. return the next paragraph so we can preload a search. the conversational context will be provided in the next message. return the next paragraph only. do not return the entire transcription. return in JSON form as { next_paragraph }.'''
     data = f"Transcription: {transcription}"
     completion = client.chat.completions.create(
-        model=GPT3_MODEL,
+        model=GPT4_MODEL,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": data},

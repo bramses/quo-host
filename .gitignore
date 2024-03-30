@@ -4,3 +4,4 @@ node_modules
 test*.txt
 _logs
 logs
+transcript*.json

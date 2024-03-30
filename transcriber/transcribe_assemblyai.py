@@ -7,6 +7,7 @@
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -25,12 +26,25 @@ transcriber = aai.Transcriber()
 transcript = transcriber.transcribe(
   FILE_URL)
 
-# for result in transcript.auto_highlights.results:
-#   print(f"Highlight: {result.text}, Count: {result.count}, Rank: {result.rank}")
-
-# print(f"Transcript: {transcript.text}")
-
+json_obj = []
 paragraphs = transcript.get_paragraphs()
 for paragraph in paragraphs:
-  print('-------------------')
-  print(paragraph.text)
+  paragraph_text = paragraph.text
+  # get start and end time of the paragraph
+  paragraph_start = paragraph.start
+  paragraph_end = paragraph.end
+
+
+  # print(f"Paragraph: {paragraph_text}")
+  # print(f"Start: {paragraph_start}, End: {paragraph_end}")
+
+  json_obj.append({
+    "text": paragraph_text,
+    "start": paragraph_start,
+    "end": paragraph_end
+  })
+
+
+json_obj = json.dumps(json_obj, indent=4)
+with open('transcript.json', 'w') as file:
+  file.write(json_obj)
