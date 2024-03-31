@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Animation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+      }
+      #parent-container {
+        display: flex;
+        flex-direction: row; /* side-by-side for main content and cover */
+        justify-content: space-between; /* space between main content and cover */
+        align-items: flex-start; /* align to top */
+        width: 100%;
+        margin: 0 auto; /* centering the container */
+        flex-wrap: wrap; /* wrap for smaller screens */
+        height: 60%;
+      }
+      .main-content {
+        display: flex; /* for vertical stack of reasoning, quote, transcript */
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch; /* stretch children to fill the column width */
+        width: 66.666%; /* two-thirds of parent container */
+      }
+      #quote-container {
+        flex-grow: 2; /* quote takes double the space */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        font-size: 1.2em;
+      }
+      .container {
+        flex-grow: 1; /* reasoning and transcript take equal space */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      #cover-container {
+        width: 33.333%; /* one-third of parent container */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* max-width: 400px; adjust accordingly */
+      }
+      .highlight {
+        font-weight: bold;
+        background-color: #ffff99;
+      }
+      /* Controls in top left corner buttons in a row */
+      #controls {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 20px;
+      }
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 768px) {
+        #parent-container {
+          flex-direction: column;
+        }
+        .container,
+        #cover-container {
+          margin-right: 0;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="parent-container">
+      <div class="main-content">
+        <div id="reasoning-container" class="container">
+          <h2>Reasoning</h2>
+          <p id="reasoning"></p>
+        </div>
+        <div id="quote-container">
+          <h2>Quote</h2>
+          <p id="quote-text"></p>
+          <p id="quote-author"></p>
+        </div>
+        <div id="transcript-container" class="container">
+          <h2>Transcript</h2>
+          <p id="transcript"></p>
+        </div>
+      </div>
+      <div id="cover-container">
+        <img
+          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
+          alt="Book cover"
+          style="max-width: 80%; max-height: 80%"
+        />
+      </div>
+    </div>
+    <script>
+      let quoteData = null;
+      // run fetch post request every 5 seconds
+      let recentQuoteData = null;
+
+      setInterval(() => {
+        fetch("/quote-data", { method: "GET" })
+          .then((response) => response.json())
+          .then((newQuoteData) => {
+            quoteData = newQuoteData;
+            if (quoteData === null) {
+              console.log("No new quote data");
+              return;
+            }
+            // console.log(quoteData);
+            if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+              // console.log("Quote data is the same as the previous one");
+              return;
+            }
+
+            recentQuoteData = quoteData;
+            animationDelay = getDelayBasedOnStringLength(quoteData.text);
+
+            animateQuote();
+            animateTranscript();
+          })
+          .catch((error) => console.error("Error:", error));
+      }, 500);
+    </script>
+
+    <script>
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function getDelayBasedOnStringLength(str) {
+        const minLength = 100;
+        const maxLength = 4000;
+        const minDelay = 1;
+        const maxDelay = 0.01;
+
+        const length = Math.min(Math.max(str.length, minLength), maxLength);
+        const t = (length - minLength) / (maxLength - minLength);
+        return lerp(minDelay, maxDelay, t);
+      }
+
+      let animationDelay = 20;
+
+      function animateText(element, text, delay, callback) {
+        let i = 0;
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            const span = document.createElement("span");
+            span.textContent = text[i];
+            element.appendChild(span);
+            i++;
+          } else {
+            clearInterval(interval);
+            if (callback) callback();
+          }
+        }, delay);
+      }
+
+      function findHighlights(text) {
+        const regex = /\*\*(.*?)\*\*/g;
+        const highlights = [];
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+          highlights.push({
+            startIdx: match.index,
+            offset: match[1].length,
+            substr: match[1],
+          });
+        }
+
+        return highlights;
+      }
+
+      function animateHighlights(element, highlights, delay) {
+        let totalDelay = 0;
+        highlights.forEach((highlight, idx) => {
+          setTimeout(() => {
+            let i = highlight.startIdx - 4 * idx;
+            const interval = setInterval(() => {
+              if (i < highlight.startIdx + (highlight.offset - 4 * idx)) {
+                if (!element.childNodes[i]) clearInterval(interval);
+                element.childNodes[i].classList.add("highlight");
+                i++;
+              } else {
+                clearInterval(interval);
+              }
+            }, delay);
+          }, totalDelay);
+          totalDelay += (highlight.offset - 4 * idx) * delay + delay;
+        });
+      }
+
+      function animateQuote() {
+        // clear previous quote
+        const quoteContainer = document.getElementById("quote-container");
+        const quoteText = document.getElementById("quote-text");
+        const reasoning = document.getElementById("reasoning");
+        const transcript = document.getElementById("transcript");
+        const coverContainer = document.getElementById("cover-container");
+
+        coverContainer.innerHTML = `<img src="${quoteData.cover}" alt="Book cover" style="max-width: 80%; max-height: 80%;" />`;
+        quoteText.textContent = "";
+
+        const quoteAuthor = document.getElementById("quote-author");
+
+        const plaintext = quoteData.text.replace(/\*\*/g, "");
+        const highlights = findHighlights(quoteData.text);
+
+        let i = 0;
+        while (i < plaintext.length) {
+          const span = document.createElement("span");
+          span.textContent = plaintext[i];
+          quoteText.appendChild(span);
+          i++;
+        }
+        animateHighlights(quoteText, highlights, 12);
+
+        // animateText(quoteText, plaintext, animationDelay, () => {
+        //   animateHighlights(quoteText, highlights, 12);
+        // });
+
+        quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
+        reasoning.textContent = quoteData.reasoning;
+        transcript.textContent = quoteData.transcript;
+      }
+
+      function animateTranscript() {
+        // bold each word in the transcript from interval start to end
+        // set a setTimeout for each word to bold class while a global timer is running
+        // clear the bold class after the timer ends
+        console.log("animateTranscript");
+
+        let globalTimer = quoteData.transcript_times[0].start;
+
+        function updateText() {
+          const updatedText = quoteData.transcript_times
+            .map((word) => {
+              if (globalTimer >= word.start && globalTimer <= word.end) {
+                return `<mark>${word.text}</mark>`;
+              } else {
+                return word.text;
+              }
+            })
+            .join(" ");
+
+          document.getElementById("transcript").innerHTML = updatedText;
+        }
+
+        // Assuming you have an element with id 'transcript' in your HTML
+        // Update the text every second (or as needed)
+        setInterval(() => {
+          globalTimer += 10; // Increment time, adjust as necessary
+          updateText();
+        }, 10);
+
+        // clear the interval after the last word is highlighted
+        setTimeout(() => {
+          console.log("clearing interval");
+          clearInterval();
+        }, (quoteData.transcript_times[quoteData.transcript_times.length - 1].end - quoteData.transcript_times[0].start));
+
+        // // You can also use requestAnimationFrame for smoother updates
+        // function update() {
+        //   globalTimer += 10; // Increment time, adjust as necessary
+        //   updateText();
+        //   requestAnimationFrame(update);
+        // }
+
+        // requestAnimationFrame(update);
+      }
+    </script>
+  </body>
+</html>

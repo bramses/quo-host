@@ -7,6 +7,8 @@ const app = express();
 //     "author": "Christopher Ryan",
 // };
 
+let quoteData = null;
+
 app.use(express.json()); // for parsing application/json
 app.use(express.static('public'));
 
@@ -25,10 +27,11 @@ app.post('/new-quote-data', (req, res) => {
 
 app.get('/quote-data', (req, res) => {
     if (!quoteData) {
-        res.json({error: 'No quote data found'});
+        res.status(404).json('I dont have that')
+    } else {
+        console.log('GET request received');
+        res.json(quoteData);
     }
-    console.log('GET request received');
-    res.json(quoteData);
 })
 
 app.listen(3000, () => {

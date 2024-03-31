@@ -118,7 +118,8 @@ import json
 def send_quotes_to_server(log_file, timestamp_file):
     timer = 0
     storage = []
-    for log, timestamp in zip(log_file['what_happened'], timestamp_file):
+    for log, timestamp in zip(log_file['what_happened'], timestamp_file['paragraphs']):
+        
         # set timer to timestamp in timestamp file using sleep
         print(f'waiting for time: {timestamp["start"] / 1000}')
         time.sleep(timestamp['start'] / 1000 - timer)
@@ -146,7 +147,8 @@ def send_quotes_to_server(log_file, timestamp_file):
                 transcript = step['data']
                 break
         
-        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': transcript})
+
+        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': timestamp['text'], 'transcript_times': timestamp['words'] })
 
         # write post requests to json file for testing
         # storage.append({
@@ -162,7 +164,7 @@ def send_quotes_to_server(log_file, timestamp_file):
 
 if __name__ == '__main__':
     log_file_path = "transcriber/logs/log-2df246e9-6f04-444d-97ad-b58b799838e9.json"
-    timestamp_file_path = "transcriber/transcript-watts.json"
+    timestamp_file_path = "transcriber/transcript-timers.json"
 
     with open(log_file_path, 'r') as log_file:
         log_file = json.load(log_file)

@@ -9,7 +9,7 @@
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
-from transcriber import process
+from _transcriber import process
 from make_log import create_run, write_to_log
 
 load_dotenv()

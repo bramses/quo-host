@@ -57,7 +57,6 @@
         justify-content: center;
         align-items: center;
         /* max-width: 400px; adjust accordingly */
-        
       }
       .highlight {
         font-weight: bold;
@@ -112,6 +111,7 @@
         <img
           src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
           alt="Book cover"
+          style="max-width: 80%; max-height: 80%"
         />
       </div>
     </div>
@@ -148,6 +148,181 @@
           "You're ready to wake up. You're going to wake up. And if you're not ready, you're going to stay, pretending that you're just a little, poor little me.",
         cover:
           "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1387752921i/695626.jpg",
+        transcript_times: {
+          text: "You're ready to wake up. You're going to wake up. And if you're not ready, you're going to stay, pretending that you're just a little, poor little me.",
+          start: 200,
+          end: 9074,
+          words: [
+            {
+              text: "You're",
+              start: 200,
+              end: 440,
+              confidence: 0.5516,
+            },
+            {
+              text: "ready",
+              start: 440,
+              end: 1100,
+              confidence: 0.99365,
+            },
+            {
+              text: "to",
+              start: 1774,
+              end: 2110,
+              confidence: 1.0,
+            },
+            {
+              text: "wake",
+              start: 2142,
+              end: 2374,
+              confidence: 0.9997,
+            },
+            {
+              text: "up.",
+              start: 2414,
+              end: 2590,
+              confidence: 0.99922,
+            },
+            {
+              text: "You're",
+              start: 2622,
+              end: 2806,
+              confidence: 0.85142,
+            },
+            {
+              text: "going",
+              start: 2830,
+              end: 2918,
+              confidence: 0.7852,
+            },
+            {
+              text: "to",
+              start: 2926,
+              end: 3022,
+              confidence: 1.0,
+            },
+            {
+              text: "wake",
+              start: 3038,
+              end: 3230,
+              confidence: 0.99982,
+            },
+            {
+              text: "up.",
+              start: 3262,
+              end: 3766,
+              confidence: 0.99951,
+            },
+            {
+              text: "And",
+              start: 3910,
+              end: 4142,
+              confidence: 0.97,
+            },
+            {
+              text: "if",
+              start: 4158,
+              end: 4262,
+              confidence: 0.99953,
+            },
+            {
+              text: "you're",
+              start: 4278,
+              end: 4454,
+              confidence: 0.71062,
+            },
+            {
+              text: "not",
+              start: 4494,
+              end: 4670,
+              confidence: 0.99985,
+            },
+            {
+              text: "ready,",
+              start: 4702,
+              end: 4958,
+              confidence: 0.99909,
+            },
+            {
+              text: "you're",
+              start: 5006,
+              end: 5206,
+              confidence: 0.90256,
+            },
+            {
+              text: "going",
+              start: 5230,
+              end: 5342,
+              confidence: 0.9641,
+            },
+            {
+              text: "to",
+              start: 5358,
+              end: 5486,
+              confidence: 1.0,
+            },
+            {
+              text: "stay,",
+              start: 5510,
+              end: 5982,
+              confidence: 0.99584,
+            },
+            {
+              text: "pretending",
+              start: 6118,
+              end: 6854,
+              confidence: 0.90915,
+            },
+            {
+              text: "that",
+              start: 6934,
+              end: 7126,
+              confidence: 0.98882,
+            },
+            {
+              text: "you're",
+              start: 7150,
+              end: 7286,
+              confidence: 0.75213,
+            },
+            {
+              text: "just",
+              start: 7310,
+              end: 7494,
+              confidence: 0.99864,
+            },
+            {
+              text: "a",
+              start: 7534,
+              end: 7662,
+              confidence: 0.98,
+            },
+            {
+              text: "little,",
+              start: 7678,
+              end: 7950,
+              confidence: 0.95205,
+            },
+            {
+              text: "poor",
+              start: 8022,
+              end: 8230,
+              confidence: 0.78968,
+            },
+            {
+              text: "little",
+              start: 8262,
+              end: 8454,
+              confidence: 0.99939,
+            },
+            {
+              text: "me.",
+              start: 8494,
+              end: 9074,
+              confidence: 0.99917,
+            },
+          ],
+        },
       };
     </script>
     <script>
@@ -186,7 +361,6 @@
       }
 
       function getDelayBasedOnStringLength(str) {
-        console.log(str.length);
         const minLength = 100;
         const maxLength = 4000;
         const minDelay = 1;
@@ -274,6 +448,44 @@
         transcript.textContent = quoteData.transcript;
       }
 
+      function animateTranscript() {
+        // bold each word in the transcript from interval start to end
+        // set a setTimeout for each word to bold class while a global timer is running
+        // clear the bold class after the timer ends
+        let globalTimer = 0; // this would be your global timer that increments over time
+
+        function updateText() {
+          const updatedText = quoteData.transcript_times.words
+            .map((word) => {
+              if (globalTimer >= word.start && globalTimer <= word.end) {
+                return `<mark>${word.text}</mark>`;
+              } else {
+                return word.text;
+              }
+            })
+            .join(" ");
+
+          document.getElementById("transcript").innerHTML = updatedText;
+        }
+
+        // Assuming you have an element with id 'transcript' in your HTML
+        // Update the text every second (or as needed)
+        // setInterval(() => {
+        //   globalTimer += 10; // Increment time, adjust as necessary
+        //   updateText();
+        // }, 10);
+
+        // You can also use requestAnimationFrame for smoother updates
+        function update() {
+          globalTimer += 10; // Increment time, adjust as necessary
+          updateText();
+          requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+
+      }
+
       document.getElementById("long-btn").addEventListener("click", () => {
         quoteData = longQuote;
         animationDelay = getDelayBasedOnStringLength(quoteData.text);
@@ -284,6 +496,7 @@
         quoteData = mediumQuote;
         animationDelay = getDelayBasedOnStringLength(quoteData.text);
         animateQuote();
+        animateTranscript();
       });
 
       document.getElementById("small-btn").addEventListener("click", () => {
