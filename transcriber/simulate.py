@@ -143,4 +143,4 @@ def simulate_transcription_process_from_json(transcript_path='./transcriber/tran
 
 if __name__ == '__main__':
     # simulate_transcription_process()
-    simulate_transcription_process_from_json('./transcriber/transcript-0329.json')
+    simulate_transcription_process_from_json('./transcriber/transcript-watts.json')

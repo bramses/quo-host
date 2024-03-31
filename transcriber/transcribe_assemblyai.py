@@ -18,7 +18,7 @@ aai.settings.api_key = os.getenv("ASSEMBLYAI_API_KEY")
 # FILE_URL = "https://github.com/AssemblyAI-Examples/audio-examples/raw/main/20230607_me_canadian_wildfires.mp3"
 
 # You can also transcribe a local file by passing in a file path
-FILE_URL = 'a-body-to-die-in.m4a' # i ran from root so file in root
+FILE_URL = 'watts.mp3' # i ran from root so file in root
 
 # config = aai.TranscriptionConfig()
 

@@ -117,12 +117,14 @@ import json
 
 def send_quotes_to_server(log_file, timestamp_file):
     timer = 0
+    storage = []
     for log, timestamp in zip(log_file['what_happened'], timestamp_file):
         # set timer to timestamp in timestamp file using sleep
         print(f'waiting for time: {timestamp["start"] / 1000}')
         time.sleep(timestamp['start'] / 1000 - timer)
         timer = timestamp['start'] / 1000
         print(f'sending quote at time: {timestamp["start"] / 1000}')
+        
         # filter the bolded quote from the log
         for step in log['steps']:
             if step['name'] == 'bold':
@@ -138,12 +140,29 @@ def send_quotes_to_server(log_file, timestamp_file):
             if step['name'] == 'filter':
                 filtered_quotes = step['data']
                 break
+        # get transcript from the log
+        for step in log['steps']:
+            if step['name'] == 'transcribe':
+                transcript = step['data']
+                break
         
-        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning']})
+        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': transcript})
+
+        # write post requests to json file for testing
+        # storage.append({
+        #     'text': bolded_quote,
+        #     'author': filtered_quotes[chosen_quote['index']]['author'],
+        #     'title': filtered_quotes[chosen_quote['index']]['title'],
+        #     'reasoning': chosen_quote['reasoning'],
+        #     'transcript': transcript
+        # })
+    # with open('transcriber/post_requests.json', 'w') as post_requests:
+    #     post_requests.write(json.dumps(storage, indent=4))
+
 
 if __name__ == '__main__':
-    log_file_path = "transcriber/logs/log-6007c2db-feed-43fd-9204-33e277e6a07b.json"
-    timestamp_file_path = "transcriber/transcript-0329.json"
+    log_file_path = "transcriber/logs/log-2df246e9-6f04-444d-97ad-b58b799838e9.json"
+    timestamp_file_path = "transcriber/transcript-watts.json"
 
     with open(log_file_path, 'r') as log_file:
         log_file = json.load(log_file)

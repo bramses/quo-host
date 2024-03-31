@@ -8,9 +8,12 @@ const app = express();
 // };
 
 app.use(express.json()); // for parsing application/json
+app.use(express.static('public'));
+
+const STYLING = true
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + (STYLING ? '/public/static-index.html' : '/public/live-index.html'));
 });
 
 app.post('/new-quote-data', (req, res) => {

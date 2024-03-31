@@ -57,6 +57,10 @@
         <p id="quote-text"></p>
         <p id="quote-author"></p>
       </div>
+      <div id="transcript-container">
+        <h2>Transcript</h2>
+        <p id="transcript"></p>
+      </div>
     </div>
     <script>
       let quoteData = null;
@@ -95,8 +99,8 @@
       function getDelayBasedOnStringLength(str) {
         const minLength = 100;
         const maxLength = 2000;
-        const minDelay = 20;
-        const maxDelay = 2;
+        const minDelay = 10;
+        const maxDelay = 1;
 
         const length = Math.min(Math.max(str.length, minLength), maxLength);
         const t = (length - minLength) / (maxLength - minLength);
@@ -160,6 +164,7 @@
         const quoteContainer = document.getElementById("quote-container");
         const quoteText = document.getElementById("quote-text");
         const reasoning = document.getElementById("reasoning");
+        const transcript = document.getElementById("transcript");
         quoteText.textContent = "";
 
         const quoteAuthor = document.getElementById("quote-author");
@@ -173,6 +178,7 @@
 
         quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
         reasoning.textContent = quoteData.reasoning;
+        transcript.textContent = quoteData.transcript;
       }
 
       animateQuote();

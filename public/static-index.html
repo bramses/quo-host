@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Animation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+      }
+      #parent-container {
+        display: flex;
+        flex-direction: row; /* side-by-side for main content and cover */
+        justify-content: space-between; /* space between main content and cover */
+        align-items: flex-start; /* align to top */
+        width: 100%;
+        margin: 0 auto; /* centering the container */
+        flex-wrap: wrap; /* wrap for smaller screens */
+        height: 60%;
+      }
+      .main-content {
+        display: flex; /* for vertical stack of reasoning, quote, transcript */
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch; /* stretch children to fill the column width */
+        width: 66.666%; /* two-thirds of parent container */
+      }
+      #quote-container {
+        flex-grow: 2; /* quote takes double the space */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        font-size: 1.2em;
+      }
+      .container {
+        flex-grow: 1; /* reasoning and transcript take equal space */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      #cover-container {
+        width: 33.333%; /* one-third of parent container */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* max-width: 400px; adjust accordingly */
+        
+      }
+      .highlight {
+        font-weight: bold;
+        background-color: #ffff99;
+      }
+      /* Controls in top left corner buttons in a row */
+      #controls {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 20px;
+      }
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 768px) {
+        #parent-container {
+          flex-direction: column;
+        }
+        .container,
+        #cover-container {
+          margin-right: 0;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <p>
+        Click on the buttons below to animate the quote with different lengths:
+      </p>
+      <button id="long-btn">animate long quote</button>
+      <button id="medium-btn">animate medium quote</button>
+      <button id="small-btn">animate short quote</button>
+    </div>
+    <div id="parent-container">
+      <div class="main-content">
+        <div id="reasoning-container" class="container">
+          <h2>Reasoning</h2>
+          <p id="reasoning"></p>
+        </div>
+        <div id="quote-container">
+          <h2>Quote</h2>
+          <p id="quote-text"></p>
+          <p id="quote-author"></p>
+        </div>
+        <div id="transcript-container" class="container">
+          <h2>Transcript</h2>
+          <p id="transcript"></p>
+        </div>
+      </div>
+      <div id="cover-container">
+        <img
+          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
+          alt="Book cover"
+        />
+      </div>
+    </div>
+    <script>
+      const longQuote = {
+        text: "It\u2019s a mistake to lose our sense of proportion, even when contemplating one\u2019s own demise\u2014**especially when contemplating one\u2019s own demise.** It\u2019s true that we all must die eventually, but why be so dramatic about it? **Contemplation of death is scary.** I get it. But taken in context, it\u2019s a relatively brief event. In one of his last journal entries, Montaigne noted that as dying amounts to just a few bad moments at the end of life, it\u2019s really not worth worrying about. If it takes an hour to die, that would represent just one 700,000th of an average human lifetime. That\u2019s a pretty good ratio, when all is said and done. And if even one hour in 700,000 is too much for you, there are far quicker ways out\u2014guaranteed painless\u2014should you choose to take control of the process yourself or have a compassionate doctor. And as for what comes next, **what\u2019s to fear from that?** As Mark Twain put it, **\u201cI do not fear death. I had been dead for billions and billions of years before I was born, and had not suffered the slightest inconvenience from it.\u201d** But the NPP keeps warning that it\u2019s a jungle out there, and only the ramparts of civilization can protect us from \u201cbeing devoured from within by rasping parasites\u201d and the rest of nature, red in tooth and claw, waiting to pounce.",
+        author: "Christopher Ryan",
+        title: "Civilized to Death: The Price of Progress",
+        reasoning:
+          "The third quote is most relevant and stimulating for conversation when considering the transcription's discussion about the nature of existence and death. It directly addresses the fears associated with contemplating one's own demise, encapsulated in the phrases 'contemplation of death is scary' and 'I do not fear death. I had been dead for billions and billions of years before I was born, and had not suffered the slightest inconvenience from it.'",
+        transcript:
+          "Deep down, you is the whole universe. So then when you die, you're not going to have to put up with everlasting non existence, because that's not an experience. A lot of people are afraid that when they die, they're going to be locked up in a dark room forever and sort of undergo that.",
+        cover:
+          "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg",
+      };
+      const shortQuote = {
+        text: "**It takes the whole of life to learn how to live, and \u2014 what will perhaps make you wonder more \u2014 it takes the whole of life to learn how to die.**",
+        author: "Lucius Seneca",
+        title: "On the Shortness of Life",
+        reasoning:
+          "The quote from Lucius Seneca, 'It takes the whole of life to learn how to live, and \u2014 what will perhaps make you wonder more \u2014 it takes the whole of life to learn how to die.', connects directly with the transcription's contemplation on the notion of going to sleep and never waking up. Seneca's words encapsulate the lifelong journey of understanding both living and the inevitable cessation of life, aligning with the transcription's exploration of contemplating one's own mortality.",
+        transcript:
+          "Think about that, children. Think about. It's one of the great wonders of life. What will it be like to go to sleep and never wake up? And if you think long enough about that, something will happen to you.",
+        cover:
+          "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1619107079i/97412.jpg",
+      };
+      const mediumQuote = {
+        text: "**Two beings inhabit your body:** you, who stumbles groggily to the coffeepot to start another day, **and the writer in you, who could remain blissfully asleep and unaware for days, months, even years as you go on about your business.** If your writer is anything like mine, \u201clazy,\u201d even \u201cslug\u201d is too kind. **Always wake up your writer early,** so you can spend the day together. **It's amazing the fun the two of you can have watching the world go by.** Your writer will be active beside you, sniffing and tasting, snooping for metaphors. **It's like writing all day without moving your fingers.**",
+        author: "Pat Pattison",
+        title: "Writing Better Lyrics",
+        reasoning:
+          "The second quote interestingly personifies the writer within as a separate being that needs awakening, resonant with the transcription's imperative tone of waking up and embodying a larger self beyond 'poor little me.' The phrases 'Two beings inhabit your body' and 'Always wake up your writer early' echo the theme of awakening and transformation presented in the transcription.",
+        transcript:
+          "You're ready to wake up. You're going to wake up. And if you're not ready, you're going to stay, pretending that you're just a little, poor little me.",
+        cover:
+          "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1387752921i/695626.jpg",
+      };
+    </script>
+    <script>
+      // let quoteData = longQuote;
+      // animationDelay = getDelayBasedOnStringLength(quoteData.text);
+      // run fetch post request every 5 seconds
+      // let recentQuoteData = null;
+
+      // setInterval(() => {
+      //   fetch("/quote-data", { method: "GET" })
+      //     .then((response) => response.json())
+      //     .then((newQuoteData) => {
+      //       quoteData = newQuoteData;
+      //       if (quoteData === null) {
+      //         console.log("No new quote data");
+      //         return;
+      //       }
+      //       console.log(quoteData);
+      //       if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+      //         console.log("Quote data is the same as the previous one");
+      //         return;
+      //       }
+
+      //       recentQuoteData = quoteData;
+      //       animationDelay = getDelayBasedOnStringLength(quoteData.text);
+
+      //       animateQuote();
+      //     })
+      //     .catch((error) => console.error("Error:", error));
+      // }, 5000);
+    </script>
+
+    <script>
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function getDelayBasedOnStringLength(str) {
+        console.log(str.length);
+        const minLength = 100;
+        const maxLength = 4000;
+        const minDelay = 1;
+        const maxDelay = 0.01;
+
+        const length = Math.min(Math.max(str.length, minLength), maxLength);
+        const t = (length - minLength) / (maxLength - minLength);
+        return lerp(minDelay, maxDelay, t);
+      }
+
+      let animationDelay = 20;
+
+      function animateText(element, text, delay, callback) {
+        let i = 0;
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            const span = document.createElement("span");
+            span.textContent = text[i];
+            element.appendChild(span);
+            i++;
+          } else {
+            clearInterval(interval);
+            if (callback) callback();
+          }
+        }, delay);
+      }
+
+      function findHighlights(text) {
+        const regex = /\*\*(.*?)\*\*/g;
+        const highlights = [];
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+          highlights.push({
+            startIdx: match.index,
+            offset: match[1].length,
+            substr: match[1],
+          });
+        }
+
+        return highlights;
+      }
+
+      function animateHighlights(element, highlights, delay) {
+        let totalDelay = 0;
+        highlights.forEach((highlight, idx) => {
+          setTimeout(() => {
+            let i = highlight.startIdx - 4 * idx;
+            const interval = setInterval(() => {
+              if (i < highlight.startIdx + (highlight.offset - 4 * idx)) {
+                if (!element.childNodes[i]) clearInterval(interval);
+                element.childNodes[i].classList.add("highlight");
+                i++;
+              } else {
+                clearInterval(interval);
+              }
+            }, delay);
+          }, totalDelay);
+          totalDelay += (highlight.offset - 4 * idx) * delay + delay;
+        });
+      }
+
+      function animateQuote() {
+        // clear previous quote
+        const quoteContainer = document.getElementById("quote-container");
+        const quoteText = document.getElementById("quote-text");
+        const reasoning = document.getElementById("reasoning");
+        const transcript = document.getElementById("transcript");
+        const coverContainer = document.getElementById("cover-container");
+
+        coverContainer.innerHTML = `<img src="${quoteData.cover}" alt="Book cover" style="max-width: 80%; max-height: 80%;" />`;
+        quoteText.textContent = "";
+
+        const quoteAuthor = document.getElementById("quote-author");
+
+        const plaintext = quoteData.text.replace(/\*\*/g, "");
+        const highlights = findHighlights(quoteData.text);
+
+        animateText(quoteText, plaintext, animationDelay, () => {
+          animateHighlights(quoteText, highlights, 12);
+        });
+
+        quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
+        reasoning.textContent = quoteData.reasoning;
+        transcript.textContent = quoteData.transcript;
+      }
+
+      document.getElementById("long-btn").addEventListener("click", () => {
+        quoteData = longQuote;
+        animationDelay = getDelayBasedOnStringLength(quoteData.text);
+        animateQuote();
+      });
+
+      document.getElementById("medium-btn").addEventListener("click", () => {
+        quoteData = mediumQuote;
+        animationDelay = getDelayBasedOnStringLength(quoteData.text);
+        animateQuote();
+      });
+
+      document.getElementById("small-btn").addEventListener("click", () => {
+        quoteData = shortQuote;
+        animationDelay = getDelayBasedOnStringLength(quoteData.text);
+        animateQuote();
+      });
+    </script>
+  </body>
+</html>

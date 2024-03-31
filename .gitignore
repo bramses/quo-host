@@ -5,3 +5,4 @@ test*.txt
 _logs
 logs
 transcript*.json
+*.mp3
