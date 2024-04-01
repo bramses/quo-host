@@ -128,9 +128,6 @@ def simulate_transcription_process_from_json(transcript_path='./transcriber/tran
         # bold the quote
         bolded_quote = bold_quote(filtered_quotes[chosen_quote['index']]['text'], section['text'], chosen_quote['reasoning'])
         run = add_step(run, 'bold', process_id, bolded_quote)
-        # post to http://localhost:3000/new-quote-data with { text: bolded_quote, author: response_json[chosen_quote['index']]['author'], title: response_json[chosen_quote['index']]['title'] }
-        # response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title']})
-        # print(response.json())
 
     run = package_run(run)
     write_to_log(run, run_id=run['id'])
