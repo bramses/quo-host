@@ -147,8 +147,17 @@ def send_quotes_to_server(log_file, timestamp_file):
                 transcript = step['data']
                 break
         
+        # read covers.json to get the book cover
+        with open('transcriber/covers.json', 'r') as covers:
+            covers = json.load(covers)
+        for cover in covers:
+            # key == book title
+            if cover == filtered_quotes[chosen_quote['index']]['title']:
+                book_cover = covers[cover]
+                break
 
-        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': timestamp['text'], 'transcript_times': timestamp['words'] })
+
+        response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': timestamp['text'], 'transcript_times': timestamp['words'], 'cover': book_cover})
 
         # write post requests to json file for testing
         # storage.append({

@@ -40,7 +40,7 @@
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
-        font-size: 1.2em;
+        font-size: 1em;
       }
       .container {
         flex-grow: 1; /* reasoning and transcript take equal space */
@@ -83,6 +83,9 @@
     </style>
   </head>
   <body>
+    <div id="controls">
+      <button id="play-btn">Play</button>
+    </div>
     <div id="parent-container">
       <div class="main-content">
         <div id="reasoning-container" class="container">
@@ -101,7 +104,7 @@
       </div>
       <div id="cover-container">
         <img
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
+          src=""
           alt="Book cover"
           style="max-width: 80%; max-height: 80%"
         />
@@ -111,30 +114,32 @@
       let quoteData = null;
       // run fetch post request every 5 seconds
       let recentQuoteData = null;
+      let isPlaying = false;
 
-      setInterval(() => {
-        fetch("/quote-data", { method: "GET" })
-          .then((response) => response.json())
-          .then((newQuoteData) => {
-            quoteData = newQuoteData;
-            if (quoteData === null) {
-              console.log("No new quote data");
-              return;
-            }
-            // console.log(quoteData);
-            if (recentQuoteData && quoteData.text === recentQuoteData.text) {
-              // console.log("Quote data is the same as the previous one");
-              return;
-            }
+      // play the transcript
+      // setInterval(() => {
+      //   fetch("/quote-data", { method: "GET" })
+      //     .then((response) => response.json())
+      //     .then((newQuoteData) => {
+      //       quoteData = newQuoteData;
+      //       if (quoteData === null) {
+      //         console.log("No new quote data");
+      //         return;
+      //       }
+      //       // console.log(quoteData);
+      //       if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+      //         // console.log("Quote data is the same as the previous one");
+      //         return;
+      //       }
 
-            recentQuoteData = quoteData;
-            animationDelay = getDelayBasedOnStringLength(quoteData.text);
+      //       recentQuoteData = quoteData;
+      //       animationDelay = getDelayBasedOnStringLength(quoteData.text);
 
-            animateQuote();
-            animateTranscript();
-          })
-          .catch((error) => console.error("Error:", error));
-      }, 500);
+      //       animateQuote();
+      //       animateTranscript();
+      //     })
+      //     .catch((error) => console.error("Error:", error));
+      // }, 500);
     </script>
 
     <script>
@@ -251,6 +256,10 @@
           const updatedText = quoteData.transcript_times
             .map((word) => {
               if (globalTimer >= word.start && globalTimer <= word.end) {
+                // if word is already bold, don't add bold class again and skip
+                if (word.text.startsWith("<mark>")) {
+                  return;
+                }
                 return `<mark>${word.text}</mark>`;
               } else {
                 return word.text;
@@ -263,7 +272,7 @@
 
         // Assuming you have an element with id 'transcript' in your HTML
         // Update the text every second (or as needed)
-        setInterval(() => {
+        const interval = setInterval(() => {
           globalTimer += 10; // Increment time, adjust as necessary
           updateText();
         }, 10);
@@ -271,8 +280,8 @@
         // clear the interval after the last word is highlighted
         setTimeout(() => {
           console.log("clearing interval");
-          clearInterval();
-        }, (quoteData.transcript_times[quoteData.transcript_times.length - 1].end - quoteData.transcript_times[0].start));
+          clearInterval(interval);
+        }, quoteData.transcript_times[quoteData.transcript_times.length - 1].end - quoteData.transcript_times[0].start);
 
         // // You can also use requestAnimationFrame for smoother updates
         // function update() {
@@ -283,6 +292,56 @@
 
         // requestAnimationFrame(update);
       }
+
+      document.getElementById("play-btn").addEventListener("click", () => {
+        console.log("Play button clicked");
+        const log_file_path =
+          "transcriber/logs/log-2df246e9-6f04-444d-97ad-b58b799838e9.json";
+        const timestamp_file_path = "transcriber/transcript-timers.json";
+        const audio_file_path = "watts.mp3";
+        fetch("http://127.0.0.1:5000/send-quotes", {
+          method: "POST",
+          body: JSON.stringify({
+            log_file: log_file_path,
+            timestamp_file: timestamp_file_path,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // play audio file
+          })
+          .catch((error) => console.error("Error:", error));
+
+        console.log("Playing audio file");
+        const audio = new Audio(audio_file_path);
+        audio.play();
+
+        setInterval(() => {
+          fetch("/quote-data", { method: "GET" })
+            .then((response) => response.json())
+            .then((newQuoteData) => {
+              quoteData = newQuoteData;
+              if (quoteData === null) {
+                console.log("No new quote data");
+                return;
+              }
+              // console.log(quoteData);
+              if (recentQuoteData && quoteData.text === recentQuoteData.text) {
+                // console.log("Quote data is the same as the previous one");
+                return;
+              }
+
+              recentQuoteData = quoteData;
+              animationDelay = getDelayBasedOnStringLength(quoteData.text);
+
+              animateQuote();
+              animateTranscript();
+            })
+            .catch((error) => console.error("Error:", error));
+        }, 500);
+      });
     </script>
   </body>
 </html>

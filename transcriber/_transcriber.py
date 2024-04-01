@@ -65,10 +65,3 @@ def process(transcript, run):
         print('Error occurred, writing to log...')
         print('Exiting...')
         return run
-
-        
-
-
-
-if __name__ == '__main__':
-    simulate_transcription_process()
