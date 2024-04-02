@@ -3,60 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/textfit/2.4.0/textFit.min.js" integrity="sha512-vLs5rAqfvmv/IpN7JustROkGAvjK/L+vgVDFe7KpdtLztqF8mZDfleK2MZj/xuOrWjma0pW+lPCMcBbPKJVC7g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
     <title>Quote Animation</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 0;
-        background-color: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0;
+        background-color: #f0f0f0;
         height: 100vh;
-        padding: 20px;
-      }
-      #parent-container {
-        display: flex;
-        flex-direction: row; /* side-by-side for main content and cover */
-        justify-content: space-between; /* space between main content and cover */
-        align-items: flex-start; /* align to top */
-        width: 100%;
-        margin: 0 auto; /* centering the container */
-        flex-wrap: wrap; /* wrap for smaller screens */
-        height: 60%;
-      }
-      .main-content {
-        display: flex; /* for vertical stack of reasoning, quote, transcript */
-        flex-direction: column;
-        justify-content: center;
-        align-items: stretch; /* stretch children to fill the column width */
-        width: 66.666%; /* two-thirds of parent container */
-      }
-      #quote-container {
-        flex-grow: 2; /* quote takes double the space */
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        font-size: 1.2em;
-      }
-      .container {
-        flex-grow: 1; /* reasoning and transcript take equal space */
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-      }
-      #cover-container {
-        width: 33.333%; /* one-third of parent container */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /* max-width: 400px; adjust accordingly */
       }
       .highlight {
         font-weight: bold;
@@ -69,50 +27,77 @@
         left: 0;
         padding: 20px;
       }
-      /* Responsive adjustments for smaller screens */
-      @media (max-width: 768px) {
-        #parent-container {
-          flex-direction: column;
-        }
-        .container,
-        #cover-container {
-          margin-right: 0;
-          max-width: 100%;
-        }
-      }
+
+      #container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* outline: 1px solid red;  */
+  }
+  .box1, .box2 {
+    height: 80vh;
+    /* outline: 1px solid red;  */
+  }
+  .box1 {
+    font-family: 'EB Garamond', serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    width: 66vw;
+    padding: 10px;
+  }
+  .box2 {
+    width: 33vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .box3, .box4 {
+    font-family: 'EB Garamond', serif;
+    height: 10vh;
+    width: 100%;
+    padding-left: 1%;
+    padding-right: 1%;
+    /* outline: 1px solid red; */
+  }
     </style>
   </head>
   <body>
-    <div id="controls">
-      <p>
-        Click on the buttons below to animate the quote with different lengths:
-      </p>
-      <button id="long-btn">animate long quote</button>
-      <button id="medium-btn">animate medium quote</button>
-      <button id="small-btn">animate short quote</button>
-    </div>
-    <div id="parent-container">
-      <div class="main-content">
-        <div id="reasoning-container" class="container">
-          <h2>Reasoning</h2>
+    <div id="container">
+      <div id="controls">
+        <p>
+          Click on the buttons below to animate the quote with different lengths:
+        </p>
+        <button id="long-btn">animate long quote</button>
+        <button id="medium-btn">animate medium quote</button>
+        <button id="small-btn">animate short quote</button>
+      </div>
+        <div id="reasoning-container" class="box3">
           <p id="reasoning"></p>
         </div>
-        <div id="quote-container">
-          <h2>Quote</h2>
-          <p id="quote-text"></p>
-          <p id="quote-author"></p>
+        <div class="box">
+          <div id="quote-container" class="box1">
+            <p id="quote-text"></p>
+            <p id="quote-author"></p>
+          </div>
+          <div id="cover-container" class="box2">
+            <img
+              src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
+              alt="Book cover"
+              style="max-width: 80%; max-height: 80%"
+            />
+          </div>
         </div>
-        <div id="transcript-container" class="container">
-          <h2>Transcript</h2>
+        <div id="transcript-container" class="box4">
           <p id="transcript"></p>
         </div>
-      </div>
-      <div id="cover-container">
-        <img
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1453131888i/28596619.jpg"
-          alt="Book cover"
-          style="max-width: 80%; max-height: 80%"
-        />
       </div>
     </div>
     <script>
@@ -354,7 +339,6 @@
       //     .catch((error) => console.error("Error:", error));
       // }, 5000);
     </script>
-
     <script>
       function lerp(start, end, t) {
         return start + (end - start) * t;
@@ -434,18 +418,37 @@
         coverContainer.innerHTML = `<img src="${quoteData.cover}" alt="Book cover" style="max-width: 80%; max-height: 80%;" />`;
         quoteText.textContent = "";
 
-        const quoteAuthor = document.getElementById("quote-author");
+        // const quoteAuthor = document.getElementById("quote-author");
 
         const plaintext = quoteData.text.replace(/\*\*/g, "");
         const highlights = findHighlights(quoteData.text);
 
-        animateText(quoteText, plaintext, animationDelay, () => {
-          animateHighlights(quoteText, highlights, 12);
-        });
+        let i = 0;
+        while (i < plaintext.length) {
+          const span = document.createElement("span");
+          span.textContent = plaintext[i];
+          quoteText.appendChild(span);
+          i++;
+        }
+        textFit(document.getElementsByClassName('box1'))
+        
 
-        quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
+        animateHighlights(quoteText, highlights, 12);
+
+
+        // const plaintext = quoteData.text.replace(/\*\*/g, "");
+        // const highlights = findHighlights(quoteData.text);
+
+        // animateText(quoteText, plaintext, animationDelay, () => {
+        //   animateHighlights(quoteText, highlights, 12);
+        // });
+
+        // quoteAuthor.textContent = `- ${quoteData.author}, "${quoteData.title}"`;
         reasoning.textContent = quoteData.reasoning;
         transcript.textContent = quoteData.transcript;
+
+        textFit(document.getElementsByClassName('box3'), {multiLine: true})
+        textFit(document.getElementsByClassName('box4'), {multiLine: true})
       }
 
       function animateTranscript() {
