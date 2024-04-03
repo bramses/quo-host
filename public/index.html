@@ -222,9 +222,6 @@
           i++;
         }
 
-        textFit(document.getElementsByClassName('box1'))
-
-
         animateHighlights(quoteText, highlights, 12);
 
         // animateText(quoteText, plaintext, animationDelay, () => {
@@ -239,6 +236,7 @@
 
         transcript.textContent = quoteData.transcript;
 
+        textFit(document.getElementsByClassName('box1'))
         textFit(document.getElementsByClassName('box3'), {multiLine: true})
         textFit(document.getElementsByClassName('box4'), {multiLine: true})
       }
@@ -292,6 +290,7 @@
         // requestAnimationFrame(update);
       }
 
+
       document.getElementById("play-btn").addEventListener("click", () => {
         // hide the play button
         document.getElementById("play-btn").style.display = "none";
@@ -299,7 +298,25 @@
           "transcriber/logs/log-2df246e9-6f04-444d-97ad-b58b799838e9.json";
         const timestamp_file_path = "transcriber/transcript-timers.json";
         const audio_file_path = "watts.mp3";
-        fetch("http://127.0.0.1:5000/send-quotes", {
+
+        // animate an empty quote to show the cover
+        quoteData = {
+        text: "**It takes the whole of life to learn how to live, and \u2014 what will perhaps make you wonder more \u2014 it takes the whole of life to learn how to die.**",
+        author: "Lucius Seneca",
+        title: "On the Shortness of Life",
+        reasoning:
+          "The quote from Lucius Seneca, 'It takes the whole of life to learn how to live, and \u2014 what will perhaps make you wonder more \u2014 it takes the whole of life to learn how to die.', connects directly with the transcription's contemplation on the notion of going to sleep and never waking up. Seneca's words encapsulate the lifelong journey of understanding both living and the inevitable cessation of life, aligning with the transcription's exploration of contemplating one's own mortality.",
+        transcript:
+          "Think about that, children. Think about. It's one of the great wonders of life. What will it be like to go to sleep and never wake up? And if you think long enough about that, something will happen to you.",
+        cover:
+          "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1619107079i/97412.jpg",
+      };
+        animateQuote();
+        // delay 3 seconds before starting the transcript
+        
+
+        setTimeout(() => {
+          fetch("http://127.0.0.1:5000/send-quotes", {
           method: "POST",
           body: JSON.stringify({
             log_file: log_file_path,
@@ -314,9 +331,9 @@
           })
           .catch((error) => console.error("Error:", error));
 
-        console.log("Playing audio file");
-        const audio = new Audio(audio_file_path);
-        audio.play();
+        // console.log("Playing audio file");
+        // const audio = new Audio(audio_file_path);
+        // audio.play();
 
         setInterval(() => {
           fetch("/quote-data", { method: "GET" })
@@ -341,6 +358,8 @@
             })
             .catch((error) => console.error("Error:", error));
         }, 500);
+        }, 3000);
+        
       });
     </script>
   </body>
