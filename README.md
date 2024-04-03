@@ -21,4 +21,10 @@ Start poetry shell with `poetry shell`
 7. start the python server with `python server.py`
 8. start the node server with `npm start`
 9. open `localhost:3000` in your browser
-10. click on the play button to start the audio and see the highlights
+10. click on the play button to start the audio and see the highlights (3s delay w/ stopgap solution)
+
+
+Run OBS in 1080p and use the browser source to show the highlights on the screen:
+```sh
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=http://localhost:3000
+```
