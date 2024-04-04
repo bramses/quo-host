@@ -79,11 +79,11 @@ def simulate_transcription_process():
 
         
 def simulate_transcription_process_from_json(transcript_path='./transcriber/transcript.json'):
-    print('Simulating a "real" transcription process...')
-    print('Loading test transcript...')
+    print('locally simulating a "real" transcription process...')
+    print('Loading transcript...')
     with open(transcript_path, 'r') as file:
         transcript = file.read()
-    print('Test transcript loaded')
+    print('transcript loaded')
     json_obj = json.loads(transcript)
     '''
     [{
@@ -94,8 +94,8 @@ def simulate_transcription_process_from_json(transcript_path='./transcriber/tran
     '''
     print('Transcribing...')
     run = create_run()
-    for section in json_obj:
-        print(section)
+    for section in json_obj['paragraphs']:
+        print(section['text'])
         run = add_process(run)
         process_id = run['what_happened'][-1]['id']
         run = add_step(run, 'transcribe', process_id, section['text'])
@@ -140,4 +140,4 @@ def simulate_transcription_process_from_json(transcript_path='./transcriber/tran
 
 if __name__ == '__main__':
     # simulate_transcription_process()
-    simulate_transcription_process_from_json('./transcriber/transcript-watts.json')
+    simulate_transcription_process_from_json('./transcriber/transcript-issue52.json')

@@ -118,6 +118,9 @@ import json
 def send_quotes_to_server(log_file, timestamp_file):
     timer = 0
     storage = []
+    print('sending quotes to server...')
+    print(len(log_file['what_happened']))
+    print(len(timestamp_file['paragraphs']))
     for log, timestamp in zip(log_file['what_happened'], timestamp_file['paragraphs']):
         
         # set timer to timestamp in timestamp file using sleep
@@ -147,6 +150,7 @@ def send_quotes_to_server(log_file, timestamp_file):
                 transcript = step['data']
                 break
         
+        book_cover = 'https://static.wikia.nocookie.net/survivor/images/0/02/UniLogo.png/revision/latest/scale-to-width-down/1000?cb=20130715140220'
         # read covers.json to get the book cover
         with open('transcriber/covers.json', 'r') as covers:
             covers = json.load(covers)
@@ -155,6 +159,8 @@ def send_quotes_to_server(log_file, timestamp_file):
             if cover == filtered_quotes[chosen_quote['index']]['title']:
                 book_cover = covers[cover]
                 break
+        
+
 
 
         response = requests.post('http://localhost:3000/new-quote-data', json={'text': bolded_quote, 'author': filtered_quotes[chosen_quote['index']]['author'], 'title': filtered_quotes[chosen_quote['index']]['title'], 'reasoning': chosen_quote['reasoning'], 'transcript': timestamp['text'], 'transcript_times': timestamp['words'], 'cover': book_cover})
