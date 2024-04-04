@@ -123,7 +123,7 @@ for
 import json
 from collections import defaultdict
 
-LOG_FILE = './transcriber/logs/log-e1e8bf3f-3994-4d05-ad97-86dd9013cdd1.json'
+LOG_FILE = './transcriber/logs/log-5a3fc4e9-c86c-4fdb-9058-c51bfbc60742.json'
 
 with open('./transcriber/covers.json', 'r') as f:
     covers = json.load(f)
@@ -144,6 +144,7 @@ for quote in logs['quotes_shown']:
                         if title in covers:
                             continue
                         else:
+                            print(f'Adding {title} to new_covers')
                             new_covers[title] = ''
 
 # append new_covers to covers

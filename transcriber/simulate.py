@@ -14,7 +14,7 @@ load_dotenv()
 test_transcript_path = './transcriber/test.txt'
 SEARCH_PATH = os.getenv('SEARCH_PATH')
 RANDOM_PATH = os.getenv('RANDOM_PATH')
-TRANSCRIPT_PATH = './transcriber/transcript-issue52.json'
+TRANSCRIPT_PATH = './transcriber/transcript-issue50.json'
 
 def simulate_transcription_process():
     print('Simulating a "real" transcription process...')
@@ -124,26 +124,26 @@ def simulate_transcription_process_from_json(transcript_path='./transcriber/tran
 
         chosen_quote = choose_quote(filtered_quotes, section['text'])
 
-        if chosen_quote['reasoning'] == 'Something went wrong. Please try again.':
-            print('Something went wrong. Please try again.')
-            run = add_step(run, 'error', process_id, chosen_quote)
-            run = package_run(run)
-            write_to_log(run, run_id=run['id'])
-            print('Exiting...')
-            return
+        # if chosen_quote['reasoning'] == 'Something went wrong. Please try again.':
+        #     print('Something went wrong. Please try again.')
+        #     run = add_step(run, 'error', process_id, chosen_quote)
+        #     run = package_run(run)
+        #     write_to_log(run, run_id=run['id'])
+        #     print('Exiting...')
+        #     return
         
         run = add_step(run, 'select', process_id, chosen_quote)
         # add quote id to quotes_shown
         run = add_quote_shown(run, filtered_quotes[chosen_quote['index']]['id'])
         # bold the quote
         bolded_quote = bold_quote(filtered_quotes[chosen_quote['index']]['text'], section['text'], chosen_quote['reasoning'])
-        if bolded_quote['edited_quote'] == 'Something went wrong. Please try again.':
-            print('Something went wrong. Please try again.')
-            run = add_step(run, 'error', process_id, bolded_quote)
-            run = package_run(run)
-            write_to_log(run, run_id=run['id'])
-            print('Exiting...')
-            return
+        # if bolded_quote['edited_quote'] == 'Something went wrong. Please try again.':
+        #     print('Something went wrong. Please try again.')
+        #     run = add_step(run, 'error', process_id, bolded_quote)
+        #     run = package_run(run)
+        #     write_to_log(run, run_id=run['id'])
+        #     print('Exiting...')
+        #     return
         
         run = add_step(run, 'bold', process_id, bolded_quote)
 

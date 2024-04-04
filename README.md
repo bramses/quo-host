@@ -16,6 +16,7 @@ Start poetry shell with `poetry shell`
 2. The transcribed json will be stored as `transcript.json`
 3. Run the AI process with `transcriber/simulate.py` with `simulate_transcription_process_from_json('transcript.json')`
 4. AI processed result will be stored in `logs/` folder
+4a. Get missing covers with `transcriber/extract_covers.py` and edit `LOG_FILE`
 5. in `public/index.html` change `log_file_path` `timestamp_file_path` and `audio_file_path` (audio needs to also be in `public/` folder)
 6. check for missing covers in `transcriber/covers.json`
 7. start the python server with `python server.py`
