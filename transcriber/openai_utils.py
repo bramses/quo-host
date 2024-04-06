@@ -91,6 +91,32 @@ def predict_paragraph(transcription):
         return {"next_paragraph": "Something went wrong. Please try again."}
 
 
+def create_chapters_from_transcript(transcript):
+    try:
+        prompt = '''given the following transcript, split it into yt chapters. the conversational context will be provided in the next message. return the chapters in the following format:
+
+        Example:
+        0:00 - Intro
+        1:20 - Chapter 1: The Problem
+        3:40 - Chapter 2: The Solution
+        5:00 - Chapter 3: The Conclusion
+
+        
+        You can and should join multiple paragraphs into one chapter if they are related. You can and should split a paragraph into multiple chapters if it is long and covers multiple topics.
+        '''
+        data = f"Transcription: {transcript}"
+        completion = client.chat.completions.create(
+            model=GPT4_MODEL,
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": data},
+            ]
+        )
+        return completion.choices[0].message.content
+    except Exception as e:
+        print(e)
+        return "Something went wrong. Please try again."
+
 if __name__ == "__main__":
     quotes = [
         {
