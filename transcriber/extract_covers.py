@@ -123,7 +123,7 @@ for
 import json
 from collections import defaultdict
 
-LOG_FILE = './transcriber/logs/log-5a3fc4e9-c86c-4fdb-9058-c51bfbc60742.json'
+LOG_FILE = './transcriber/logs/log-d49ec431-f58b-4904-8536-62cfafd2d3f2.json'
 
 with open('./transcriber/covers.json', 'r') as f:
     covers = json.load(f)

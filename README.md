@@ -30,3 +30,6 @@ Run OBS in 1080p and use the browser source to show the highlights on the screen
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=http://localhost:3000
 ```
 then in menu bar Chrome > services > resize1080p
+
+11. `ctrl-c` to stop the servers
+12. get the chapters from `transcriber/transcript_to_chapters.py` and edit `TRANSCRIPT_PATH`

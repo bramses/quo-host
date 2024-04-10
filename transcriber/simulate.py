@@ -14,7 +14,7 @@ load_dotenv()
 test_transcript_path = './transcriber/test.txt'
 SEARCH_PATH = os.getenv('SEARCH_PATH')
 RANDOM_PATH = os.getenv('RANDOM_PATH')
-TRANSCRIPT_PATH = './transcriber/transcript-issue50.json'
+TRANSCRIPT_PATH = './transcriber/transcript-issue51.json'
 
 def simulate_transcription_process():
     print('Simulating a "real" transcription process...')

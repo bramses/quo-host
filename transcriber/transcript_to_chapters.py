@@ -22,6 +22,8 @@ import time
 import json
 from openai_utils import create_chapters_from_transcript
 
+TRANSCRIPT_PATH = './transcriber/transcript-issue51.json'
+
 def join_paragraphs(paragraphs):
     return ' '.join([f"({seconds_to_hms(paragraph['start'])}) {paragraph['text']}" for paragraph in paragraphs])
 
@@ -34,7 +36,7 @@ def load_transcript(transcript_path):
     return transcript
 
 if __name__ == '__main__':
-    transcript_path = './transcriber/transcript-issue52.json'
+    transcript_path = TRANSCRIPT_PATH
     transcript = load_transcript(transcript_path)
     paragraphs = transcript['paragraphs']
     transcript_text = join_paragraphs(paragraphs=paragraphs)
